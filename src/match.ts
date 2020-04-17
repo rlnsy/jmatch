@@ -32,9 +32,12 @@ function preprocess(p: string) {
  * and must be of the form ,<number>;
  * ',' and ';' are therefore reserved and must be double
  * escaped (e.q. \\;) to be recoqnized by the matcher 
- * @param m 
+ * @param m sequence of match cases; see types
  */
 export function match(s: INPUT, m: MATCH_STMNT): any {
+    if (!s || !m) {
+        throw new Error("Missing one or more arguments to match");
+    }
     let outcome = null;
     let i = 0;
     while (i < m.length && !outcome) {
@@ -53,7 +56,6 @@ export function match(s: INPUT, m: MATCH_STMNT): any {
                 argixs.push(argi);
             }
             const mchStr: string = preprocess(detokenize(p));
-            console.log(mchStr);
             const inputMatch = new RegExp(mchStr).exec(s);
             if (inputMatch) {
                 let args: ARGV[] = argixs.map((i) => undefined)
@@ -76,45 +78,3 @@ export function match(s: INPUT, m: MATCH_STMNT): any {
         return outcome();
     }
 }
-
-console.log("---Match case");
-
-match("my name is Rowan and I'm 21 years old", [
-    ["my name is ,2; and I'm ,1; years old", 
-        (age, name) => { 
-            console.log(name); 
-            console.log(age); 
-        }],
-    [_, () => { console.log("default case"); }]
-]);
-
-console.log("---Default case");
-
-match("my name is Rowan and Im 21 years old", [
-    ["my name is ,2; and I'm ,1; years old", 
-        (age, name) => { 
-            console.log(name); 
-            console.log(age); 
-        }],
-    [_, () => { console.log("default"); }]
-]);
-
-console.log("---No match case");
-
-match("my name is Rowan and Im 21 years old", [
-    ["my name is ,2; and I'm ,1; years old", 
-        (age, name) => { 
-            console.log(name); 
-            console.log(age); 
-        }]
-]);
-
-console.log("---Escape case");
-
-match("my name is Rowan and I'm 21 years old,22;", [
-    ["my name is ,2; and I'm ,1; years old\\,22\\;", 
-        (age, name) => { 
-            console.log(name); 
-            console.log(age); 
-        }]
-]);

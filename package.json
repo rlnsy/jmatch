@@ -1,14 +1,23 @@
 {
   "name": "jmatch",
-  "version": "0.0.1",
-  "description": "Regex-based string pattern matching with values",
-  "main": "scratch.js",
+  "version": "0.0.2",
+  "description": "Regex-based 'quasiquote'-like pattern matching",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "mocha test/**/*.spec.ts --timeout 2000 --require ts-node/register test/**/*.spec.ts"
   },
-  "author": "rlnsy",
+  "author": "Rowan Lindsay",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^13.11.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
   }
 }
