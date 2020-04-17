@@ -5,22 +5,35 @@ type RHS = (...args: VALUE[]) => any;
 type MATCH = [PATTERN, RHS];
 type MATCH_STMNT = MATCH[];
 type INPUT = string;
+type ARGV = string | undefined
 
 export const _ = "ELSE_CASE";
 
 /**
  * Search for instances of value tokens in
  * the string s and replace them with regex
- * wildcards
+ * wildcard capture groups
  */
-function detokenize(s: string) {
+function detokenize(s: string): string {
     let result = s;
     while (result.search(TOKEN) > 0) {
-        result = result.replace(TOKEN, ".+")
+        result = result.replace(TOKEN, '(.+)')
     }
     return result;
 }
 
+function preprocess(p: string) {
+    return p.replace('\\,', ',').replace('\\;', ';');
+}
+
+/**
+ * 
+ * @param s tokens follow the regular expression above
+ * and must be of the form ,<number>;
+ * ',' and ';' are therefore reserved and must be double
+ * escaped (e.q. \\;) to be recoqnized by the matcher 
+ * @param m 
+ */
 export function match(s: INPUT, m: MATCH_STMNT): any {
     let outcome = null;
     let i = 0;
@@ -31,31 +44,32 @@ export function match(s: INPUT, m: MATCH_STMNT): any {
         if (p == _) {
             outcome = () => r();
         } else {
-            let tkIdcs: number[] = [];
-            let tkLens: number[] = [];
             let argixs: number[] = [];
             let tokenMatch: RegExpExecArray | null;
             while ((tokenMatch = TOKEN.exec(p)) !== null) {
                 const tokenLen = tokenMatch[0].length;
-                const index: number = tokenMatch.index;
                 const argi: number = Number(
                     tokenMatch[0].substr(1,tokenLen - 2));
-                tkIdcs.push(index);
-                tkLens.push(tokenLen);
                 argixs.push(argi);
             }
-            const mchStr: string = detokenize(p);
+            const mchStr: string = preprocess(detokenize(p));
+            console.log(mchStr);
             const inputMatch = new RegExp(mchStr).exec(s);
             if (inputMatch) {
-                let args = ["Arg1", "Arg2"];
-                // TODO extract arg values (HARD)
+                let args: ARGV[] = argixs.map((i) => undefined)
+                let vix = 0;
+                while (vix < argixs.length) {
+                    const v = inputMatch[vix + 1];
+                    const argix = argixs[vix];
+                    args[argix - 1] = v;
+                    vix++;
+                }
                 outcome = () => r(...args);
             } else {
                 i++; // check other matches
             }
         }
     }
-    new RegExp('ab+c');
     if (!outcome) {
         throw new Error(`No match for '${s}'`);
     } else {
@@ -89,6 +103,16 @@ console.log("---No match case");
 
 match("my name is Rowan and Im 21 years old", [
     ["my name is ,2; and I'm ,1; years old", 
+        (age, name) => { 
+            console.log(name); 
+            console.log(age); 
+        }]
+]);
+
+console.log("---Escape case");
+
+match("my name is Rowan and I'm 21 years old,22;", [
+    ["my name is ,2; and I'm ,1; years old\\,22\\;", 
         (age, name) => { 
             console.log(name); 
             console.log(age); 
