@@ -1,3 +1,7 @@
+/**
+ * Tests for the primary match function
+ */
+
 import { expect } from 'chai';
 import 'mocha';
 import { match, _ } from '../index';

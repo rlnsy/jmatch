@@ -1,3 +1,8 @@
+/**
+ * Define types and functions for the match
+ * module
+ */
+
 const TOKEN = /,[0-9]+;/g;
 type PATTERN = string;
 type VALUE = any;

@@ -1,6 +1,6 @@
 {
   "name": "jmatch",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Regex-based 'quasiquote'-like pattern matching",
   "main": "index.js",
   "scripts": {
