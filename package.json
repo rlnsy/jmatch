@@ -1,8 +1,9 @@
 {
   "name": "jmatch",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Regex-based 'quasiquote'-like pattern matching",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "mocha test/**/*.spec.ts --timeout 2000 --require ts-node/register test/**/*.spec.ts"
@@ -24,7 +25,8 @@
     "test": "test"
   },
   "files": [
-    "index.js", "src/match.js"
+    "index.js", "index.d.ts", "index.ts",
+    "src/match.js", "src/match.d.ts", "src/match.ts"
   ],
   "repository": {
     "type": "git",
