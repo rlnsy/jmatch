@@ -1,0 +1,14 @@
+{
+  "name": "jmatch",
+  "version": "0.0.1",
+  "description": "Regex-based string pattern matching with values",
+  "main": "scratch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rlnsy",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.11.1"
+  }
+}
