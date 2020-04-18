@@ -61,7 +61,7 @@ export function match(s: INPUT, m: MATCH_STMNT): any {
                 argixs.push(argi);
             }
             const mchStr: string = preprocess(detokenize(p));
-            const inputMatch = new RegExp(mchStr).exec(s);
+            const inputMatch = new RegExp(mchStr, 's').exec(s);
             if (inputMatch) {
                 let args: ARGV[] = argixs.map((i) => undefined)
                 let vix = 0;
